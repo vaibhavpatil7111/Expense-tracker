@@ -1,0 +1,94 @@
+@model ExpenseTracker.Models.Category
+
+@{
+    ViewData["Title"] = Model?.CategoryId == 0 ? "Create Category" : "Edit Category";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="widget">
+                <div class="widget-title">
+                    <h5>@(Model?.CategoryId == 0 ? "Create Category" : "Edit Category")</h5>
+                </div>
+                <hr />
+                <form asp-action="AddOrEdit" class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="CategoryId" />
+                    <div class="form-group mb-3">
+                        <label class="form-label">Type</label>
+                        <div class="btn-group d-flex" role="group">
+                            <input type="radio" class="btn-check" name="Type" id="expense" value="Expense" autocomplete="off" checked="@(Model?.Type == "Expense" || Model == null)">
+                            <label class="btn btn-outline-dark flex-fill" for="expense">
+                                <i class="fa fa-minus-circle"></i> Expense
+                            </label>
+                            <input type="radio" class="btn-check" name="Type" id="income" value="Income" autocomplete="off" checked="@(Model?.Type == "Income")">
+                            <label class="btn btn-outline-success flex-fill" for="income">
+                                <i class="fa fa-plus-circle"></i> Income
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Title" class="form-label">Category Title</label>
+                        <input asp-for="Title" class="form-control" placeholder="Enter category title" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Icon" class="form-label">Icon</label>
+                        <input asp-for="Icon" class="form-control" placeholder="e.g., 🍔, 🚗, 💰" />
+                        <span asp-validation-for="Icon" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left"></i> Back to List
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-check"></i> @(Model?.CategoryId == 0 ? "Create Category" : "Update Category")
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="info-panel">
+                <div class="info-header">
+                    <h5><i class="fa fa-lightbulb"></i> Category Tips</h5>
+                </div>
+                <div class="info-content">
+                    <div class="tip-item">
+                        <h6><i class="fa fa-tag"></i> Choose Clear Names</h6>
+                        <p>Use descriptive names like "Groceries", "Gas", "Salary" for easy identification.</p>
+                    </div>
+                    <div class="tip-item">
+                        <h6><i class="fa fa-smile"></i> Use Emojis</h6>
+                        <p>Add emojis to make categories visually appealing: 🍔 Food, 🚗 Transport, 💰 Income.</p>
+                    </div>
+                    <div class="tip-item">
+                        <h6><i class="fa fa-chart-pie"></i> Organize by Type</h6>
+                        <p>Separate Income and Expense categories for better financial tracking.</p>
+                    </div>
+                </div>
+                <div class="stats-panel">
+                    <h6><i class="fa fa-info-circle"></i> Quick Stats</h6>
+                    <div class="stat-row">
+                        <span>Total Categories:</span>
+                        <span class="stat-value">12</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Income Categories:</span>
+                        <span class="stat-value">3</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Expense Categories:</span>
+                        <span class="stat-value">9</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

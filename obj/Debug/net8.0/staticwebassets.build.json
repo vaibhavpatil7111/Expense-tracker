@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "C2QX5xFCxKOR55iRzXNTiNeXmgJDarKtuf8psmVS/ns=",
+  "Source": "ExpenseTracker",
+  "BasePath": "_content/ExpenseTracker",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ExpenseTracker/wwwroot",
+      "Source": "ExpenseTracker",
+      "ContentRoot": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/",
+      "BasePath": "_content/ExpenseTracker",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/site.css",
+      "SourceId": "ExpenseTracker",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/",
+      "BasePath": "_content/ExpenseTracker",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/site.css"
+    }
+  ]
+}
