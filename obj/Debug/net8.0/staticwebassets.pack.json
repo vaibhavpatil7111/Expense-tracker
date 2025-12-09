@@ -1,8 +1,20 @@
 {
   "Files": [
     {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/flatpickr-custom.css",
+      "PackagePath": "staticwebassets/css/flatpickr-custom.css"
+    },
+    {
       "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
+    },
+    {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/js/category.js",
+      "PackagePath": "staticwebassets/js/category.js"
+    },
+    {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/js/transaction.js",
+      "PackagePath": "staticwebassets/js/transaction.js"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.ExpenseTracker.Microsoft.AspNetCore.StaticWebAssets.props",

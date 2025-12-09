@@ -1,0 +1,131 @@
+@model ExpenseTracker.Models.Transaction
+
+@{
+    ViewData["Title"] = Model?.TransactionId == 0 ? "Create Transaction" : "Edit Transaction";
+}
+
+<!-- Hero Section -->
+<div class="transaction-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">@(Model?.TransactionId == 0 ? "➕ New Transaction" : "✏️ Edit Transaction")</h1>
+        <p class="hero-subtitle">@(Model?.TransactionId == 0 ? "Record your income or expense" : "Update transaction details")</p>
+    </div>
+</div>
+
+<div class="transaction-form-container">
+    <div class="form-main-card">
+        <form asp-action="AddOrEdit" class="modern-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="TransactionId" />
+
+            <!-- Category Selection -->
+            <div class="form-field">
+                <label asp-for="CategoryId" class="field-label">
+                    <span class="label-icon">🏷️</span>
+                    <span>Category</span>
+                    <span class="required-mark">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <select asp-for="CategoryId" class="modern-select" asp-items="ViewBag.Categories">
+                        <option value="">Select a category...</option>
+                    </select>
+                </div>
+                <span asp-validation-for="CategoryId" class="field-error"></span>
+            </div>
+
+            <!-- Amount Input -->
+            <div class="form-field">
+                <label asp-for="Amount" class="field-label">
+                    <span class="label-icon">💰</span>
+                    <span>Amount</span>
+                    <span class="required-mark">*</span>
+                </label>
+                <div class="input-wrapper amount-input">
+                    <span class="currency-symbol">₹</span>
+                    <input asp-for="Amount" class="modern-input with-currency" type="number" placeholder="0" min="0" step="1" />
+                </div>
+                <span asp-validation-for="Amount" class="field-error"></span>
+            </div>
+
+            <!-- Date Input -->
+            <div class="form-field">
+                <label asp-for="Date" class="field-label">
+                    <span class="label-icon">📅</span>
+                    <span>Date</span>
+                    <span class="required-mark">*</span>
+                </label>
+                <div class="input-wrapper date-input-wrapper">
+                    <input asp-for="Date" class="modern-input modern-date-input" type="text" />
+                </div>
+                <span asp-validation-for="Date" class="field-error"></span>
+            </div>
+
+            <!-- Note Textarea -->
+            <div class="form-field">
+                <label asp-for="Note" class="field-label">
+                    <span class="label-icon">📝</span>
+                    <span>Note</span>
+                    <span class="optional-mark">(Optional)</span>
+                </label>
+                <div class="input-wrapper">
+                    <textarea asp-for="Note" class="modern-textarea" rows="4" placeholder="Add details about this transaction..."></textarea>
+                </div>
+                <span asp-validation-for="Note" class="field-error"></span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <a asp-action="Index" class="btn-cancel">
+                    <i class="fa fa-arrow-left"></i> Back to List
+
+                </a>
+                <button type="submit" class="btn-submit">
+                    <span>@(Model?.TransactionId == 0 ? "✓" : "💾")</span>
+                    <span>@(Model?.TransactionId == 0 ? "Create Transaction" : "Update Transaction")</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Quick Tips Sidebar -->
+    <div class="tips-sidebar">
+        <div class="tip-card tip-primary">
+            <div class="tip-icon">💡</div>
+            <div class="tip-content">
+                <h4>Quick Tip</h4>
+                <p>Choose the right category to keep your finances organized and get accurate reports.</p>
+            </div>
+        </div>
+
+        <div class="tip-card tip-success">
+            <div class="tip-icon">✅</div>
+            <div class="tip-content">
+                <h4>Best Practice</h4>
+                <p>Add notes to remember important details like payment method or location.</p>
+            </div>
+        </div>
+
+        <div class="tip-card tip-info">
+            <div class="tip-icon">📊</div>
+            <div class="tip-content">
+                <h4>Track Better</h4>
+                <p>Record transactions as they happen for the most accurate financial picture.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.querySelector('.modern-date-input');
+        if (dateInput) {
+            flatpickr(dateInput, {
+                dateFormat: 'Y-m-d',
+                defaultDate: dateInput.value || new Date(),
+                disableMobile: true,
+                animate: true,
+                monthSelectorType: 'static'
+            });
+        }
+    });
+</script>

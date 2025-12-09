@@ -2,158 +2,417 @@
 
 @{
     ViewData["Title"] = "Categories";
+    var categoryList = Model.ToList();
+    var totalItems = categoryList.Count;
 }
 
-<div class="container">
-    @Html.AntiForgeryToken()
-    <div class="row">
-        <div class="col-12">
-            <div class="page-header">
-                <h3>Categories</h3>
-                <a asp-action="AddOrEdit" class="btn btn-primary">Add New Category</a>
-            </div>
+<!-- Hero Section -->
+<div class="category-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Manage Categories</h1>
+        <p class="hero-subtitle">Organize and manage your income and expense categories for better tracking and reporting</p>
+    </div>
+</div>
 
-            @if (Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Icon</th>
-                                <th class="sortable" onclick="sortTable(1)">Title <span class="sort-arrow"></span></th>
-                                <th class="sortable" onclick="sortTable(2)">Type <span class="sort-arrow"></span></th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td class="icon-cell">@item.Icon</td>
-                                    <td>@item.Title</td>
-                                    <td>
-                                        <span class="badge @(item.Type == "Income" ? "bg-success" : "bg-danger")">
-                                            @item.Type
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a asp-action="AddOrEdit" asp-route-id="@item.CategoryId"
-                                            class="btn btn-sm btn-outline-primary">
-                                            <i class="fa fa-edit"></i> Edit
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger"
-                                            onclick="showDeleteModal('@item.CategoryId', '@item.Title')">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+<div class="category-container">
+    @Html.AntiForgeryToken()
+
+    <!-- Stats Section -->
+    @if (totalItems > 0)
+    {
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <div class="stat-value">@totalItems</div>
+                    <div class="stat-label">Total Categories</div>
                 </div>
-            }
-            else
-            {
-                <div class="empty-message">
-                    <p>No categories found.</p>
-                    <a asp-action="AddOrEdit" class="btn btn-primary">Create Your First Category</a>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-content">
+                    <div class="stat-value">@categoryList.Count(c => c.Type == "Income")</div>
+                    <div class="stat-label">Income Categories</div>
                 </div>
-            }
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📉</div>
+                <div class="stat-content">
+                    <div class="stat-value">@categoryList.Count(c => c.Type == "Expense")</div>
+                    <div class="stat-label">Expense Categories</div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Action Header -->
+    <div class="action-header">
+        <div class="header-title">
+            <h2>All Categories</h2>
+        </div>
+        <div>
+            <a asp-action="SeedData" class="btn btn-success me-2">
+                <span class="btn-icon">🌱</span> Seed Sample Data
+            </a>
+            <a asp-action="AddOrEdit" class="btn btn-primary btn-lg">
+                <span class="btn-icon">➕</span> Add New Category
+            </a>
         </div>
     </div>
+
+    @if (totalItems > 0)
+    {
+        <!-- Table Card -->
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table class="categories-table" id="categoriesTable">
+                    <thead>
+                        <tr>
+                            <th class="col-icon">Icon</th>
+                            <th class="col-title sortable" data-column="1">
+                                Title <span class="sort-arrow"></span>
+                            </th>
+                            <th class="col-type sortable" data-column="2">
+                                Type <span class="sort-arrow"></span>
+                            </th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @foreach (var item in categoryList)
+                        {
+                            <tr class="category-row" data-category-id="@item.CategoryId">
+                                <td class="icon-cell">
+                                    <span class="category-icon">@item.Icon</span>
+                                </td>
+                                <td class="title-cell">
+                                    <span class="category-title">@item.Title</span>
+                                </td>
+                                <td class="type-cell">
+                                    <span class="category-badge @(item.Type == "Income" ? "badge-success" : "badge-danger")">
+                                        @item.Type
+                                    </span>
+                                </td>
+                                <td class="action-cell">
+                                    <a asp-action="AddOrEdit" asp-route-id="@item.CategoryId" class="btn-action btn-edit" title="Edit @item.Title">
+                                        <span>✏️</span>
+                                    </a>
+                                    <button type="button" class="btn-action btn-delete delete-btn" 
+                                            data-id="@item.CategoryId" 
+                                            data-name="@item.Title"
+                                            title="Delete @item.Title">
+                                        <span>🗑️</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <span>Showing <span id="itemsShown">10</span> of <span id="totalItems">@totalItems</span></span>
+                </div>
+
+                <div class="pagination-controls">
+                    <button id="prevBtn" class="btn-pagination" onclick="previousPage()">
+                        <span>← Previous</span>
+                    </button>
+
+                    <div class="page-indicator">
+                        <span>Page <span id="currentPage">1</span> of <span id="totalPages">@((totalItems + 9) / 10)</span></span>
+                    </div>
+
+                    <button id="nextBtn" class="btn-pagination" onclick="nextPage()">
+                        <span>Next →</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3 class="empty-title">No Categories Yet</h3>
+            <p class="empty-description">Start by creating your first category to organize your transactions.</p>
+            <a asp-action="AddOrEdit" class="btn btn-primary btn-lg">
+                <span class="btn-icon">➕</span> Create Your First Category
+            </a>
+        </div>
+    }
 </div>
 
 <!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
+    <div class="modal-dialog">
         <div class="modal-header">
-            <h5>Confirm Delete</h5>
+            <h3>Confirm Delete</h3>
+            <button type="button" class="modal-close" onclick="closeDeleteModal()">
+                <span>✕</span>
+            </button>
         </div>
         <div class="modal-body">
             <p>Are you sure you want to delete the category <strong id="categoryName"></strong>?</p>
-            <p class="text-muted">This action cannot be undone.</p>
+            <p class="text-warning">This action cannot be undone.</p>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-            <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+            <button type="button" class="btn btn-secondary" onclick="window.closeDeleteModal()">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="event.stopPropagation(); window.confirmDelete(); return false;">Delete</button>
         </div>
     </div>
 </div>
 
-
-
 <script>
+    // ===== PAGINATION STATE =====
+    const paginationState = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        allRows: [],
+        sortColumn: null,
+        sortDirection: 'asc'
+    };
+
+    // ===== INITIALIZATION =====
+    document.addEventListener('DOMContentLoaded', function () {
+        initializePagination();
+        setupSortingHandlers();
+        setupDeleteHandlers();
+    });
+
+    function initializePagination() {
+        const tableBody = document.getElementById('tableBody');
+        if (!tableBody) return;
+
+        paginationState.allRows = Array.from(tableBody.querySelectorAll('tr'));
+        const totalPages = Math.ceil(paginationState.allRows.length / paginationState.itemsPerPage);
+
+        displayPage(paginationState.currentPage);
+        updatePaginationControls(totalPages);
+    }
+
+    // ===== PAGINATION LOGIC =====
+    function displayPage(pageNum) {
+        const start = (pageNum - 1) * paginationState.itemsPerPage;
+        const end = start + paginationState.itemsPerPage;
+        const visibleRows = paginationState.allRows.slice(start, end);
+
+        // Hide all rows
+        paginationState.allRows.forEach(row => {
+            row.style.display = 'none';
+            row.classList.remove('fade-in');
+        });
+
+        // Show current page rows with animation
+        visibleRows.forEach((row, index) => {
+            row.style.display = '';
+            setTimeout(() => row.classList.add('fade-in'), index * 30);
+        });
+
+        // Update info text
+        const itemsShown = Math.min(end, paginationState.allRows.length);
+        document.getElementById('itemsShown').textContent = itemsShown;
+        document.getElementById('currentPage').textContent = pageNum;
+    }
+
+    function updatePaginationControls(totalPages) {
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const totalPagesSpan = document.getElementById('totalPages');
+
+        totalPagesSpan.textContent = totalPages;
+
+        prevBtn.disabled = paginationState.currentPage === 1;
+        nextBtn.disabled = paginationState.currentPage === totalPages;
+
+        prevBtn.classList.toggle('disabled', paginationState.currentPage === 1);
+        nextBtn.classList.toggle('disabled', paginationState.currentPage === totalPages);
+    }
+
+    function previousPage() {
+        const totalPages = Math.ceil(paginationState.allRows.length / paginationState.itemsPerPage);
+        if (paginationState.currentPage > 1) {
+            paginationState.currentPage--;
+            displayPage(paginationState.currentPage);
+            updatePaginationControls(totalPages);
+        }
+    }
+
+    function nextPage() {
+        const totalPages = Math.ceil(paginationState.allRows.length / paginationState.itemsPerPage);
+        if (paginationState.currentPage < totalPages) {
+            paginationState.currentPage++;
+            displayPage(paginationState.currentPage);
+            updatePaginationControls(totalPages);
+        }
+    }
+
+    // ===== SORTING LOGIC =====
+    function setupSortingHandlers() {
+        document.querySelectorAll('th.sortable').forEach(header => {
+            header.addEventListener('click', function () {
+                const columnIndex = parseInt(this.dataset.column);
+                sortTable(columnIndex, this);
+            });
+        });
+    }
+
+    function sortTable(columnIndex, headerElement) {
+        const isCurrentSort = paginationState.sortColumn === columnIndex;
+        paginationState.sortDirection = isCurrentSort && paginationState.sortDirection === 'asc' ? 'desc' : 'asc';
+        paginationState.sortColumn = columnIndex;
+
+        // Clear other sort indicators
+        document.querySelectorAll('.sort-arrow').forEach(arrow => arrow.textContent = '');
+
+        // Set current sort indicator
+        const arrow = headerElement.querySelector('.sort-arrow');
+        arrow.textContent = paginationState.sortDirection === 'asc' ? '▲' : '▼';
+
+        // Sort rows
+        paginationState.allRows.sort((rowA, rowB) => {
+            const textA = rowA.cells[columnIndex].textContent.trim();
+            const textB = rowB.cells[columnIndex].textContent.trim();
+            const comparison = textA.localeCompare(textB);
+            return paginationState.sortDirection === 'asc' ? comparison : -comparison;
+        });
+
+        // Reset to page 1 after sort
+        paginationState.currentPage = 1;
+        displayPage(paginationState.currentPage);
+        const totalPages = Math.ceil(paginationState.allRows.length / paginationState.itemsPerPage);
+        updatePaginationControls(totalPages);
+    }
+
+    // ===== DELETE FUNCTIONALITY =====
     let deleteUrl = '';
+    let currentCategoryId = null;
 
-    function showDeleteModal(categoryId, categoryName) {
-        document.getElementById('categoryName').textContent = categoryName;
+    function setupDeleteHandlers() {
+        // Use event delegation on table body
+        const tableBody = document.getElementById('tableBody');
+        if (tableBody) {
+            tableBody.addEventListener('click', function(e) {
+                const deleteBtn = e.target.closest('.delete-btn');
+                if (deleteBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const categoryId = deleteBtn.getAttribute('data-id');
+                    const categoryName = deleteBtn.getAttribute('data-name');
+                    
+                    console.log('Delete clicked:', categoryId, categoryName);
+                    
+                    if (categoryId && categoryName) {
+                        showDeleteModal(categoryId, categoryName);
+                    }
+                }
+            });
+        }
+
+        // Confirm button uses onclick attribute in HTML
+    }
+
+    window.showDeleteModal = function(categoryId, categoryName) {
+        console.log('showDeleteModal called');
+        const modal = document.getElementById('deleteModal');
+        const nameElement = document.getElementById('categoryName');
+        
+        if (!modal) {
+            console.error('Modal not found');
+            return;
+        }
+        if (!nameElement) {
+            console.error('Category name element not found');
+            return;
+        }
+        
+        currentCategoryId = categoryId;
+        nameElement.textContent = categoryName;
         deleteUrl = '/Category/Delete/' + categoryId;
-        document.getElementById('deleteModal').style.display = 'flex';
+        
+        console.log('Showing modal for:', categoryName, 'ID:', categoryId);
+        
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        document.body.style.overflow = 'hidden';
     }
 
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').style.display = 'none';
+    window.closeDeleteModal = function() {
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        currentCategoryId = null;
+        deleteUrl = '';
     }
 
-    function confirmDelete() {
+    window.confirmDelete = function() {
+        console.log('confirmDelete called');
+        console.log('Delete URL:', deleteUrl);
+        console.log('Category ID:', currentCategoryId);
+        
+        if (!deleteUrl || !currentCategoryId) {
+            alert('Error: Invalid category');
+            closeDeleteModal();
+            return;
+        }
+
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        console.log('CSRF Token:', token ? 'Found' : 'Not found');
+
+        // Disable button during request
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Deleting...';
+        }
+
         fetch(deleteUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            },
+            body: token ? `__RequestVerificationToken=${encodeURIComponent(token)}` : ''
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (response.ok || response.status === 200 || response.status === 204) {
+                console.log('Delete successful');
+                closeDeleteModal();
+                location.reload();
+            } else {
+                return response.text().then(text => {
+                    throw new Error('Delete failed: ' + response.status + ' - ' + text.substring(0, 100));
+                });
             }
         })
-            .then(response => {
-                if (response.ok) {
-                    closeDeleteModal();
-                    location.reload(); // Refresh the page to show updated list
-                } else {
-                    alert('Error deleting category');
-                }
-            })
-            .catch(error => {
-                alert('Error deleting category');
-            });
+        .catch(error => {
+            console.error('Delete error:', error);
+            alert('Error deleting category: ' + error.message);
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Delete';
+            }
+        });
     }
 
-    // Close modal when clicking outside
+    // Close modal on escape or outside click
     document.addEventListener('click', function (e) {
-        if (e.target.id === 'deleteModal') {
+        const modal = document.getElementById('deleteModal');
+        if (e.target === modal) {
             closeDeleteModal();
         }
     });
 
-    // Simple table sorting
-    let sortStates = {};
-
-    function sortTable(columnIndex) {
-        const table = document.querySelector('.table');
-        const tbody = table.querySelector('tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-        const header = table.querySelectorAll('th')[columnIndex];
-        const arrow = header.querySelector('.sort-arrow');
-
-        // Clear other arrows and states
-        document.querySelectorAll('.sort-arrow').forEach((a, i) => {
-            if (i !== columnIndex) {
-                a.textContent = '';
-                sortStates[i] = null;
-            }
-        });
-
-        // Toggle sort direction
-        sortStates[columnIndex] = sortStates[columnIndex] === 'asc' ? 'desc' : 'asc';
-        const isAsc = sortStates[columnIndex] === 'asc';
-        arrow.textContent = isAsc ? '▲' : '▼';
-
-        // Sort rows
-        rows.sort((a, b) => {
-            const aText = a.cells[columnIndex].textContent.trim();
-            const bText = b.cells[columnIndex].textContent.trim();
-            return isAsc ? aText.localeCompare(bText) : bText.localeCompare(aText);
-        });
-
-        // Append sorted rows
-        rows.forEach(row => tbody.appendChild(row));
-    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
 </script>
+<script src="~/js/category.js" asp-append-version="true"></script>

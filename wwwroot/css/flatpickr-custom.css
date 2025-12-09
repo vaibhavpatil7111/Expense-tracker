@@ -1,0 +1,107 @@
+/* Flatpickr Custom Styling */
+.flatpickr-calendar {
+  background: white;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 8px;
+  font-family: inherit;
+}
+
+.flatpickr-months {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 12px 12px 0 0;
+  padding: 16px 12px;
+  margin-bottom: 12px;
+}
+
+.flatpickr-month {
+  color: white;
+  fill: white;
+}
+
+.flatpickr-current-month {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 600;
+}
+
+.flatpickr-current-month input.cur-year {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 600;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  fill: white !important;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.flatpickr-weekdays {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 8px 0;
+  margin-bottom: 4px;
+}
+
+.flatpickr-weekday {
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.flatpickr-day {
+  border-radius: 8px;
+  color: #1f2937;
+  font-weight: 500;
+  margin: 2px;
+  transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover {
+  background: #d1fae5 !important;
+  border-color: #d1fae5 !important;
+  color: #065f46;
+}
+
+.flatpickr-day.today {
+  border-color: #10b981 !important;
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 700;
+}
+
+.flatpickr-day.selected {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border-color: #10b981 !important;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: #d1d5db;
+}
+
+.flatpickr-day.disabled {
+  color: #e5e7eb;
+}
