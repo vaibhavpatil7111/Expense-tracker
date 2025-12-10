@@ -18,6 +18,14 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /home/ubantu/Vaibhav/Projects/Expense tracker
 build_property._RazorSourceGeneratorDebug = 
 
+[/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Category/AddOrEdit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2F0ZWdvcnkvQWRkT3JFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -34,12 +42,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2F0ZWdvcnkvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Expenses/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXhwZW5zZXMvQ3JlYXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Expenses/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXhwZW5zZXMvSW5kZXguY3NodG1s
+[/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFzaGJvYXJkL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/ubantu/Vaibhav/Projects/Expense tracker/Views/Home/Index.cshtml]

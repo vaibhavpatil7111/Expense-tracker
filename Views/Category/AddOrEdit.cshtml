@@ -2,93 +2,140 @@
 
 @{
     ViewData["Title"] = Model?.CategoryId == 0 ? "Create Category" : "Edit Category";
-    Layout = "_Layout";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-7">
-            <div class="widget">
-                <div class="widget-title">
-                    <h5>@(Model?.CategoryId == 0 ? "Create Category" : "Edit Category")</h5>
+<!-- Hero Section -->
+<div class="category-form-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">@(Model?.CategoryId == 0 ? "🏷️ Create Category" : "✏️ Edit Category")</h1>
+        <p class="hero-subtitle">@(Model?.CategoryId == 0 ? "Add a new category to organize your transactions" : "Update category details")</p>
+    </div>
+</div>
+
+<div class="category-form-container">
+    <div class="form-main-card">
+        <form asp-action="AddOrEdit" class="modern-category-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="CategoryId" />
+
+            <!-- Type Selection -->
+            <div class="form-field">
+                <label class="field-label">
+                    <span class="label-icon">💼</span>
+                    <span>Category Type</span>
+                    <span class="required-mark">*</span>
+                </label>
+                <div class="type-selector">
+                    <input asp-for="Type" type="radio" class="type-radio" id="expense" value="Expense">
+                    <label class="type-option expense-option" for="expense">
+                        <span class="type-icon">💸</span>
+                        <span class="type-label">Expense</span>
+                        <span class="type-desc">Money going out</span>
+                    </label>
+                    
+                    <input asp-for="Type" type="radio" class="type-radio" id="income" value="Income">
+                    <label class="type-option income-option" for="income">
+                        <span class="type-icon">💰</span>
+                        <span class="type-label">Income</span>
+                        <span class="type-desc">Money coming in</span>
+                    </label>
                 </div>
-                <hr />
-                <form asp-action="AddOrEdit" class="form-horizontal">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" asp-for="CategoryId" />
-                    <div class="form-group mb-3">
-                        <label class="form-label">Type</label>
-                        <div class="btn-group d-flex" role="group">
-                            <input type="radio" class="btn-check" name="Type" id="expense" value="Expense" autocomplete="off" checked="@(Model?.Type == "Expense" || Model == null)">
-                            <label class="btn btn-outline-dark flex-fill" for="expense">
-                                <i class="fa fa-minus-circle"></i> Expense
-                            </label>
-                            <input type="radio" class="btn-check" name="Type" id="income" value="Income" autocomplete="off" checked="@(Model?.Type == "Income")">
-                            <label class="btn btn-outline-success flex-fill" for="income">
-                                <i class="fa fa-plus-circle"></i> Income
-                            </label>
-                        </div>
-                    </div>
+            </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Title" class="form-label">Category Title</label>
-                        <input asp-for="Title" class="form-control" placeholder="Enter category title" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
+            <!-- Title Input -->
+            <div class="form-field">
+                <label asp-for="Title" class="field-label">
+                    <span class="label-icon">📝</span>
+                    <span>Category Title</span>
+                    <span class="required-mark">*</span>
+                </label>
+                <input asp-for="Title" class="modern-input" placeholder="e.g., Groceries, Salary, Transport" required />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Icon" class="form-label">Icon</label>
-                        <input asp-for="Icon" class="form-control" placeholder="e.g., 🍔, 🚗, 💰" />
-                        <span asp-validation-for="Icon" class="text-danger"></span>
-                    </div>
+            <!-- Icon Input -->
+            <div class="form-field">
+                <label asp-for="Icon" class="field-label">
+                    <span class="label-icon">😊</span>
+                    <span>Icon (Emoji)</span>
+                    <span class="optional-mark">(Optional)</span>
+                </label>
+                <div class="icon-input-wrapper">
+                    <input asp-for="Icon" class="modern-input icon-input" placeholder="Pick an emoji" maxlength="2" />
+                    <div class="icon-preview" id="iconPreview">@(Model?.Icon ?? "🏷️")</div>
+                </div>
+                <div class="icon-suggestions">
+                    <span class="suggestion-label">Quick picks:</span>
+                    <button type="button" class="icon-btn" data-icon="🍔">🍔</button>
+                    <button type="button" class="icon-btn" data-icon="🚗">🚗</button>
+                    <button type="button" class="icon-btn" data-icon="🏠">🏠</button>
+                    <button type="button" class="icon-btn" data-icon="💼">💼</button>
+                    <button type="button" class="icon-btn" data-icon="🎬">🎬</button>
+                    <button type="button" class="icon-btn" data-icon="⚡">⚡</button>
+                    <button type="button" class="icon-btn" data-icon="🎓">🎓</button>
+                    <button type="button" class="icon-btn" data-icon="💊">💊</button>
+                </div>
+                <span asp-validation-for="Icon" class="field-error"></span>
+            </div>
 
-                    <div class="form-group d-flex justify-content-between">
-                        <a asp-action="Index" class="btn btn-secondary">
-                            <i class="fa fa-arrow-left"></i> Back to List
-                        </a>
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa fa-check"></i> @(Model?.CategoryId == 0 ? "Create Category" : "Update Category")
-                        </button>
-                    </div>
-                </form>
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <a asp-action="Index" class="btn-cancel">
+                    <span>←</span>
+                    <span>Cancel</span>
+                </a>
+                <button type="submit" class="btn-submit">
+                    <span>@(Model?.CategoryId == 0 ? "✓" : "💾")</span>
+                    <span>@(Model?.CategoryId == 0 ? "Create Category" : "Update Category")</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tips Sidebar -->
+    <div class="tips-sidebar">
+        <div class="tip-card tip-primary">
+            <div class="tip-icon">💡</div>
+            <div class="tip-content">
+                <h4>Naming Tips</h4>
+                <p>Use clear, descriptive names that you'll easily recognize when adding transactions.</p>
             </div>
         </div>
-        <div class="col-md-5">
-            <div class="info-panel">
-                <div class="info-header">
-                    <h5><i class="fa fa-lightbulb"></i> Category Tips</h5>
-                </div>
-                <div class="info-content">
-                    <div class="tip-item">
-                        <h6><i class="fa fa-tag"></i> Choose Clear Names</h6>
-                        <p>Use descriptive names like "Groceries", "Gas", "Salary" for easy identification.</p>
-                    </div>
-                    <div class="tip-item">
-                        <h6><i class="fa fa-smile"></i> Use Emojis</h6>
-                        <p>Add emojis to make categories visually appealing: 🍔 Food, 🚗 Transport, 💰 Income.</p>
-                    </div>
-                    <div class="tip-item">
-                        <h6><i class="fa fa-chart-pie"></i> Organize by Type</h6>
-                        <p>Separate Income and Expense categories for better financial tracking.</p>
-                    </div>
-                </div>
-                <div class="stats-panel">
-                    <h6><i class="fa fa-info-circle"></i> Quick Stats</h6>
-                    <div class="stat-row">
-                        <span>Total Categories:</span>
-                        <span class="stat-value">12</span>
-                    </div>
-                    <div class="stat-row">
-                        <span>Income Categories:</span>
-                        <span class="stat-value">3</span>
-                    </div>
-                    <div class="stat-row">
-                        <span>Expense Categories:</span>
-                        <span class="stat-value">9</span>
-                    </div>
-                </div>
+
+        <div class="tip-card tip-success">
+            <div class="tip-icon">🎨</div>
+            <div class="tip-content">
+                <h4>Visual Identity</h4>
+                <p>Choose emojis that represent your category at a glance for faster identification.</p>
+            </div>
+        </div>
+
+        <div class="tip-card tip-info">
+            <div class="tip-icon">📊</div>
+            <div class="tip-content">
+                <h4>Organization</h4>
+                <p>Group similar categories together and keep your list organized for better tracking.</p>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Icon preview and selection
+    const iconInput = document.querySelector('.icon-input');
+    const iconPreview = document.getElementById('iconPreview');
+    const iconBtns = document.querySelectorAll('.icon-btn');
+
+    iconInput?.addEventListener('input', function() {
+        iconPreview.textContent = this.value || '🏷️';
+    });
+
+    iconBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const icon = this.getAttribute('data-icon');
+            iconInput.value = icon;
+            iconPreview.textContent = icon;
+        });
+    });
+</script>
 

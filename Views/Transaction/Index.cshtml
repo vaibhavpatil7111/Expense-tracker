@@ -86,18 +86,17 @@
                         @foreach (var item in transactionList)
                         {
                             <tr class="category-row">
-                                <td>@item.Date.ToString("dd MMM yyyy")</td>
-                                <td>
-                                    <span class="category-icon">@item.Category?.Icon</span>
+                                <td data-label="Date">@item.Date.ToString("dd MMM yyyy")</td>
+                                <td data-label="Category">
                                     <span class="category-title">@item.Category?.Title</span>
                                 </td>
-                                <td>
+                                <td data-label="Amount">
                                     <span class="category-badge @(item.Category?.Type == "Income" ? "badge-success" : "badge-danger")">
                                         ₹@item.Amount.ToString("N0")
                                     </span>
                                 </td>
-                                <td>@item.Note</td>
-                                <td class="action-cell">
+                                <td data-label="Note">@item.Note</td>
+                                <td class="action-cell" data-label="Actions">
                                     <a asp-action="AddOrEdit" asp-route-id="@item.TransactionId" class="btn-action btn-edit" title="Edit">
                                         <span>✏️</span>
                                     </a>

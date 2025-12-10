@@ -10,22 +10,21 @@ namespace ExpenseTracker.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
 
+        [Required]
         [Column (TypeName = "nvarchar(50)")]
-        public string? Title { get; set; }
+        public string Title { get; set; } = "";
 
         [Column(TypeName = "nvarchar(50)")]
         public string Icon { get; set; } = "";
+        
+        [Required]
         [Column(TypeName = "nvarchar(50)")]
         public string Type { get; set; } = "Expense";
 
-        // [NotMapped]
-        // public string? TitleIcon
-        // {
-        //     get
-        //     {
-        //         return this.Icon + " " + this.Title;
-        //     }
-        // }
-
+        [Required]
+        public string UserId { get; set; } = "";
+        
+        [ForeignKey("UserId")]
+        public ApplicationUser? User { get; set; }
     }
 }

@@ -2,13 +2,33 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using ExpenseTracker.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // DI
-builder.Services.AddDbContext<ExpenseTracker.Models.ApplicationDBContext>(options =>
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DevConnection")));
+
+// Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<ApplicationDBContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+});
 
 var app = builder.Build();
 
@@ -20,6 +40,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

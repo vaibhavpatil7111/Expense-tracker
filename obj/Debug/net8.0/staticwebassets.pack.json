@@ -1,12 +1,36 @@
 {
   "Files": [
     {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/auth.css",
+      "PackagePath": "staticwebassets/css/auth.css"
+    },
+    {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/category-form.css",
+      "PackagePath": "staticwebassets/css/category-form.css"
+    },
+    {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/dashboard.css",
+      "PackagePath": "staticwebassets/css/dashboard.css"
+    },
+    {
       "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/flatpickr-custom.css",
       "PackagePath": "staticwebassets/css/flatpickr-custom.css"
     },
     {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/header-footer.css",
+      "PackagePath": "staticwebassets/css/header-footer.css"
+    },
+    {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/home.css",
+      "PackagePath": "staticwebassets/css/home.css"
+    },
+    {
       "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
+    },
+    {
+      "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/css/transaction-responsive.css",
+      "PackagePath": "staticwebassets/css/transaction-responsive.css"
     },
     {
       "Id": "/home/ubantu/Vaibhav/Projects/Expense tracker/wwwroot/js/category.js",

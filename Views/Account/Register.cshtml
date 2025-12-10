@@ -1,0 +1,65 @@
+@model ExpenseTracker.Models.RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Expense Tracker</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/auth.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-icon">💰</div>
+                <h1>Create Account</h1>
+                <p>Start tracking your expenses today</p>
+            </div>
+
+            <form asp-action="Register" method="post" class="auth-form">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="FullName">Full Name</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" class="form-control" placeholder="Minimum 6 characters" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Re-enter your password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn-auth">Register</button>
+
+                <div class="auth-footer">
+                    Already have an account? <a asp-action="Login">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

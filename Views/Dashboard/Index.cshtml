@@ -1,0 +1,173 @@
+@model IEnumerable<ExpenseTracker.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var transactions = Model.ToList();
+    var totalIncome = transactions.Where(t => t.Category?.Type == "Income").Sum(t => t.Amount);
+    var totalExpense = transactions.Where(t => t.Category?.Type == "Expense").Sum(t => t.Amount);
+    var balance = totalIncome - totalExpense;
+    var incomeTransactions = transactions.Where(t => t.Category?.Type == "Income").OrderByDescending(t => t.Date).Take(5);
+    var expenseTransactions = transactions.Where(t => t.Category?.Type == "Expense").OrderByDescending(t => t.Date).Take(5);
+}
+
+<!-- Dashboard Hero -->
+<div class="dashboard-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">📊 Financial Dashboard</h1>
+        <p class="hero-subtitle">Track your income and expenses at a glance</p>
+    </div>
+</div>
+
+<div class="dashboard-container">
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card income-card">
+            <div class="card-icon">💰</div>
+            <div class="card-content">
+                <div class="card-label">Total Income</div>
+                <div class="card-value">₹@totalIncome.ToString("N0")</div>
+            </div>
+        </div>
+        
+        <div class="summary-card expense-card">
+            <div class="card-icon">💸</div>
+            <div class="card-content">
+                <div class="card-label">Total Expense</div>
+                <div class="card-value">₹@totalExpense.ToString("N0")</div>
+            </div>
+        </div>
+        
+        <div class="summary-card balance-card">
+            <div class="card-icon">📈</div>
+            <div class="card-content">
+                <div class="card-label">Net Balance</div>
+                <div class="card-value @(balance >= 0 ? "positive" : "negative")">₹@balance.ToString("N0")</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart and Recent Transactions -->
+    <div class="dashboard-grid">
+        <!-- Pie Chart -->
+        <div class="chart-card">
+            <h3 class="card-title">Income vs Expense</h3>
+            <div class="chart-container">
+                <canvas id="incomeExpenseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="recent-transactions">
+            <div class="transactions-section">
+                <h3 class="section-title">💚 Recent Income</h3>
+                @if (incomeTransactions.Any())
+                {
+                    <div class="transaction-list">
+                        @foreach (var item in incomeTransactions)
+                        {
+                            <div class="transaction-item income">
+                                <div class="transaction-info">
+                                    <div class="transaction-category">@item.Category?.Title</div>
+                                    <div class="transaction-date">@item.Date.ToString("dd MMM yyyy")</div>
+                                </div>
+                                <div class="transaction-amount">+₹@item.Amount.ToString("N0")</div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="no-data">No income transactions yet</p>
+                }
+            </div>
+
+            <div class="transactions-section">
+                <h3 class="section-title">❤️ Recent Expenses</h3>
+                @if (expenseTransactions.Any())
+                {
+                    <div class="transaction-list">
+                        @foreach (var item in expenseTransactions)
+                        {
+                            <div class="transaction-item expense">
+                                <div class="transaction-info">
+                                    <div class="transaction-category">@item.Category?.Title</div>
+                                    <div class="transaction-date">@item.Date.ToString("dd MMM yyyy")</div>
+                                </div>
+                                <div class="transaction-amount">-₹@item.Amount.ToString("N0")</div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="no-data">No expense transactions yet</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <a asp-controller="Transaction" asp-action="AddOrEdit" class="action-btn primary">
+            <span>➕</span>
+            <span>Add Transaction</span>
+        </a>
+        <a asp-controller="Transaction" asp-action="Index" class="action-btn secondary">
+            <span>📋</span>
+            <span>View All</span>
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+    const totalIncome = @totalIncome;
+    const totalExpense = @totalExpense;
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Income', 'Expense'],
+            datasets: [{
+                data: [totalIncome, totalExpense],
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(16, 185, 129, 1)',
+                    'rgba(239, 68, 68, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            size: 14,
+                            weight: '600'
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = totalIncome + totalExpense;
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return label + ': ₹' + value.toLocaleString() + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>

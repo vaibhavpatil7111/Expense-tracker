@@ -26,8 +26,8 @@
                     <span class="required-mark">*</span>
                 </label>
                 <div class="input-wrapper">
-                    <select asp-for="CategoryId" class="modern-select" asp-items="ViewBag.Categories">
-                        <option value="">Select a category...</option>
+                    <select asp-for="CategoryId" class="modern-select category-select" asp-items="ViewBag.Categories" popupHeight=220px>
+                        <option value="">🔍 Select a category...</option>
                     </select>
                 </div>
                 <span asp-validation-for="CategoryId" class="field-error"></span>
@@ -42,7 +42,7 @@
                 </label>
                 <div class="input-wrapper amount-input">
                     <span class="currency-symbol">₹</span>
-                    <input asp-for="Amount" class="modern-input with-currency" type="number" placeholder="0" min="0" step="1" />
+                    <input asp-for="Amount" class="modern-input with-currency" type="number" placeholder="0" min="1" step="1" required />
                 </div>
                 <span asp-validation-for="Amount" class="field-error"></span>
             </div>
@@ -122,9 +122,11 @@
             flatpickr(dateInput, {
                 dateFormat: 'Y-m-d',
                 defaultDate: dateInput.value || new Date(),
-                disableMobile: true,
+                disableMobile: false,
                 animate: true,
-                monthSelectorType: 'static'
+                monthSelectorType: 'static',
+                static: false,
+                position: 'auto center'
             });
         }
     });

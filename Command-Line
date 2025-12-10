@@ -1,0 +1,10 @@
+
+ cd "/home/ubantu/Vaibhav/Projects/Expense tracker" && dotnet build 2>&1 | grep -E "(error|Build|Success)" | head -20
+
+
+cd "/home/ubantu/Vaibhav/Projects/Expense tracker" && rm -f "Expense tracker.sln" && dotnet build 2>&1 | tail -10
+
+
+ cd "/home/ubantu/Vaibhav/Projects/Expense tracker" && dotnet watch run
+
+

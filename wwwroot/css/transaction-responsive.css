@@ -1,0 +1,86 @@
+/* Transaction Page Mobile Responsive Styles */
+
+@media (max-width: 768px) {
+  /* Hide table, show card layout */
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .categories-table thead {
+    display: none;
+  }
+  
+  .categories-table tbody tr {
+    display: block;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    background: white;
+  }
+  
+  .categories-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border: none;
+  }
+  
+  .categories-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+    flex: 0 0 100px;
+  }
+  
+  .categories-table tbody td:last-child {
+    justify-content: flex-end;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 1px solid #f3f4f6;
+  }
+  
+  .action-cell {
+    justify-content: flex-end !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-hero {
+    padding: 30px 16px;
+  }
+  
+  .hero-title {
+    font-size: 1.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .stats-grid {
+    gap: 12px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+  }
+  
+  .stat-icon {
+    font-size: 2rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .action-header {
+    gap: 12px;
+  }
+  
+  .btn-primary {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}
